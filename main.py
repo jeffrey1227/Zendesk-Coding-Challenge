@@ -57,7 +57,6 @@ def showPage(res, start, count, next_page=True):
 	
 	return start
 
-
 def pageThrough(res, start, count, page_num):
 	showPage(res, start-25, count)
 	while True:
@@ -72,26 +71,33 @@ def pageThrough(res, start, count, page_num):
 		else:
 			showInvalidCommand()
 
-
-
-def getTickets(ticket_id=None):
-	
-	if not ticket_id:
+def getAllTickets():
+	try:
 		res = requests.get(TICKET_API, verify=True, auth=HTTPBasicAuth(USERNAME, TOKEN))
-		res = res.json()
-		start, count = 0, res['count']
-		pageThrough(res, start, count, 1)
-			
-	else:
-		res = requests.get(TICKET_API + ticket_id + '.json', verify=True, auth=HTTPBasicAuth(USERNAME, TOKEN))
-		res = res.json()
-		if 'error' in res:
-			print("Ticket not found")
-			return
-		print(f'{"ID": <8}{"Subject": <64}{"Submitted by": <16}')
-		showSingleTicket(res['ticket'])
+	except requests.exceptions.RequestException as e:
+		raise SystemExit(e)
+
+	res = res.json()
+	start, count = 0, res['count']
+	pageThrough(res, start, count, 1)
 	return
 
+def getOneTicket(ticket_id):
+	try:
+		res = requests.get(TICKET_API + ticket_id + '.json', verify=True, auth=HTTPBasicAuth(USERNAME, TOKEN))
+	except requests.exceptions.RequestException as e:
+		raise SystemExit(e)
+
+	res = res.json()
+	if 'error' in res:
+		print("<Ticket not found>")
+		return
+	print(f'{"ID": <8}{"Subject": <64}{"Submitted by": <16}')
+	showSingleTicket(res['ticket'])
+	return
+
+def getTickets(ticket_id=None):
+	return getAllTickets() if not ticket_id else getOneTicket(ticket_id)
 
 def execOptions():
 	while True:
@@ -108,11 +114,9 @@ def execOptions():
 			showInvalidCommand()
 	return
 
-
 def exitProgram():
 	print("Thanks for using ticket viewer.")
 	quit()
-
 
 
 if __name__ == '__main__':
@@ -121,10 +125,8 @@ if __name__ == '__main__':
 		cmd = input('> ')
 		if cmd == 'menu':
 			execOptions()
-
 		elif cmd == 'quit':
 			exitProgram()
-
 		else:
 			showInvalidCommand()
 			showWelcome()
