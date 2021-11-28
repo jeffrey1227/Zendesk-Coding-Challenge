@@ -1,0 +1,27 @@
+from ticketfetcher import TicketFetcher
+from ticket import Ticket
+from ticketviewer import TicketViewer
+
+
+def main():
+	ticket_viewer = TicketViewer()
+
+	actions = {'1': ticket_viewer.showAllTickets,
+			   '2': ticket_viewer.showTicketById,
+			   'menu': ticket_viewer.showMenu,
+			   'quit': ticket_viewer.quitProgram
+			   }
+
+	while True:
+		action = ticket_viewer.readInput()
+		if action in actions:
+			actions[action]()
+		else:
+			ticket_viewer.showCommandIsInvalid()
+
+	return
+
+
+
+if __name__ == '__main__':
+	main()
