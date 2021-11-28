@@ -2,7 +2,7 @@
 
 I used **Python** to write a **CLI** *Zendesk Ticket Viewer* program.
 
-  
+<br>
 
 ### Installation
 
@@ -18,11 +18,11 @@ Install the required libraries with:
 
 ``conda install --file requirements.txt``
 
-  
+<br>
 
 ### Usage
 
-Under ``src/`` folder, run `python main.py` to execute the ticket viewer program.
+To execute the ticket viewer program, go under ``src/`` folder and run `python main.py`.
 
 For testing:
 
