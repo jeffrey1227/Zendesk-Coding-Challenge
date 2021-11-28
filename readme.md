@@ -1,6 +1,6 @@
 # Zendesk Coding Challenge
 
-I used **Python** and wrote a **CLI** *Zendesk Ticket Viewer* program.
+I used **Python** to write a **CLI** *Zendesk Ticket Viewer* program.
 
 
 
