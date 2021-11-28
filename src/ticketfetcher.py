@@ -14,6 +14,7 @@ class TicketFetcher:
 			self.res = requests.get(self.api + ticket_id + '.json', verify=True, auth=HTTPBasicAuth(self.username, self.token))
 		except requests.exceptions.RequestException as e:
 			raise SystemExit("### Sorry, we are unable to retrieve ticket info at the time. ###")
+		# change response to dict
 		self.res_dict = self.res.json()
 		if self.checkResError():
 			return None
@@ -32,8 +33,8 @@ class TicketFetcher:
 		return self.res_dict
 
 	def checkResError(self):
+		# error handling messages
 		if 'error' in self.res_dict:
-			# print("Error", self.res_dict['error'])
 			if self.res_dict['error'] == "Couldn't authenticate you":
 				print("### Wrong username or token. Please try again. ###")
 			if self.res_dict['error'] == "RecordNotFound":

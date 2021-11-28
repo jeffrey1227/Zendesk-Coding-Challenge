@@ -6,6 +6,7 @@ from ticketviewer import TicketViewer
 def main():
 	ticket_viewer = TicketViewer()
 
+	# define acceptable commands
 	actions = {'1': ticket_viewer.showAllTickets,
 			   '2': ticket_viewer.showTicketById,
 			   'menu': ticket_viewer.showMenu,
@@ -17,6 +18,7 @@ def main():
 		if action in actions:
 			actions[action]()
 		else:
+			# if user input a invalid command, tell the user it was invalid, and make them try again
 			ticket_viewer.showCommandIsInvalid()
 
 	return

@@ -7,6 +7,7 @@ class TicketViewer:
 	def __init__(self):
 		self.showWelcome()
 		self.ticket_fetcher = TicketFetcher()
+		self.num_per_page = 25
 
 
 	@staticmethod
@@ -44,6 +45,8 @@ class TicketViewer:
 	def showTicketById(self):
 		ticket_id = input("Enter ticket number: ")
 		ticket = self.ticket_fetcher.fetchOneTicketById(ticket_id)['ticket']
+
+		# print the tickets in a page
 		print('-'*80)
 		print(f'|{"ID": <8}{"Subject": <54}{"Submitted by": <16}|')
 		self.listSingleTicket(Ticket(ticket))
@@ -52,8 +55,9 @@ class TicketViewer:
 		self.showMenu()
 
 	def getEndAndPageNumber(self):
-		self.end = self.start + 25 if (self.count - self.start) // 25 else self.count
-		self.page_num = self.start // 25 + 1
+		# get end of index in a page
+		self.end = self.start + self.num_per_page if (self.count - self.start) // self.num_per_page else self.count
+		self.page_num = self.start // self.num_per_page + 1
 
 
 	def showAllTickets(self):
@@ -62,6 +66,7 @@ class TicketViewer:
 		self.start = 0
 		self.count = len(tickets)
 		self.getEndAndPageNumber()
+		# put the structures tickets in a list
 		for i in range(self.count):
 			self.ticket_list.append(Ticket(tickets[i]))
 		
@@ -74,19 +79,21 @@ class TicketViewer:
 		print(f'|{ticket.ticket_id: <8}{ticket.subject: <54}{ticket.submitter_id: <16}|')
 
 	def isPageError(self):
+		# nothinh will be printed
 		if self.start == 0 and self.count == 0:
 			return False
 		if self.start >= self.count:
 			print("\n<That was already the last page>")
-			self.start -= 25
+			self.start -= self.num_per_page
 			return True
 		elif self.start < 0:
 			print("\n<That was already the first page>")
-			self.start += 25
+			self.start += self.num_per_page
 			return True
 		return False
 
 	def showPage(self):
+		# if no page error, show the page
 		if not self.isPageError():
 			
 			print("\n<Page "+ str(self.page_num) + ">")
@@ -101,16 +108,17 @@ class TicketViewer:
 
 
 	def nextPage(self):
-		self.start += 25
+		self.start += self.num_per_page
 		self.getEndAndPageNumber()
 		self.showPage()
 
 	def prevPage(self):
-		self.start -= 25
+		self.start -= self.num_per_page
 		self.getEndAndPageNumber()
 		self.showPage()
 
 	def pageThrough(self):
+		# accept commands 'np', 'pp' to page through the list and 'c' to escape the list
 		actions = {'np': self.nextPage,
 				   'pp': self.prevPage
 				   }
